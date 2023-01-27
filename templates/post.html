@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>テスト</title>
+</head>
+<body>
+    <h1>テスト画面</h1>
+    <form action="/post" method="post">
+        <input type="text" name="username" placeholder="名前">
+        <input type="text" name="content" placeholder="投稿内容">
+        <input type="submit" value="送信">
+    </form>
+
+    {% if username != "" and conten != ""%}
+        <p>{{ username }}</p>
+        <p>{{ content }}</p>
+    {% endif %}
+
+</body>
+</html>
