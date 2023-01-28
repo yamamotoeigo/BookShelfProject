@@ -8,20 +8,20 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>テスト</h1>
     <h1>詳細ページです</h1>
+    <h3>
+        {% if book["author"] != "" %}
+            タイトル: <b>「{{ book["title"] }}」</b>出版社 or 著者: {{ book["author"] }}
+        {% elif book["publisher"] != "" %}
+            タイトル: <b>「{{ book["title"] }}」</b>出版社 or 著者: {{ book["publisher"] }}
+        {% else %}
+            タイトル: <b>「{{ book["title"] }}」</b>出版社 or 著者: 情報がありません
+        {% endif %}
+    </h3>
     {% if book["image_url"] != "" %}
                 <img src={{ book["image_url"] }} alt="本の表紙画像">
             {% else %}
                 <img src={{ book["image_url"] }} alt="表紙画像がありません">
-            {% endif %}
-
-            {% if book["author"] != "" %}
-                <li>タイトル: <b>「{{ book["title"] }}」</b>出版社 or 著者: {{ book["author"] }}</li>
-            {% elif book["publisher"] != "" %}
-                <li>タイトル: <b>「{{ book["title"] }}」</b>出版社 or 著者: {{ book["publisher"] }}</li>
-            {% else %}
-                <li>タイトル: <b>「{{ book["title"] }}」</b>出版社 or 著者: 情報がありません</li>
             {% endif %}
 </body>
 </html>

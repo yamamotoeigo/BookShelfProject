@@ -28,6 +28,8 @@ def search():
         return render_template('/search.html')
 
     if request.method == "POST":
+        global books
+        books = []
         q = request.form['q']
         if q == "":
             print("hoge")
