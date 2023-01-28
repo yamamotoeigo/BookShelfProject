@@ -9,21 +9,29 @@
     <title>Document</title>
 </head>
 <body>
-<form action="/search" method="post">
-    <input type="text" name="isbn" placeholder="検索窓">
-    <input type="submit" value="送信">
-</form>
-<br>
-    <h1>検索結果</h1>
-    <h4>検索件数: {{ totalItems }}件</h4>
+<div class="input-group">
+    <form action="/search" method="post">
+        <input type="text" class="form-control" placeholder="キーワードを入力" name="q">
+        <input class="btn btn-outline-success" type="submit" id="button-addon2" value="検索"><i class="fas fa-search"></i></input>
+    </form>
+</div>
+<h1>検索結果</h1>
+    <h4>検索件数: {{ books | length }}件</h4>
     <ul>
-        {% for i in range(totalItems) %}
-            {% if image[i] != "" %}
-                <img src={{ image[i] }} alt="本の表紙画像">
+        {% for book in books %}
+            {% if book["image_url"] != "" %}
+                <img src={{ book["image_url"] }} alt="本の表紙画像">
             {% else %}
-                <img src={{ image[i] }} alt="表紙画像がありません">
+                <img src={{ book["image_url"] }} alt="表紙画像がありません">
             {% endif %}
-            <li>タイトル: <b>「{{ title[i] }}」</b>著者: {{ author[i] }}</li>
+
+            {% if book["author"] != "" %}
+                <li>タイトル: <a href="/book/detail/{{ book["id"] }}" role="button"><b>「{{ book["title"] }}」</b></a> 著者: {{ book["author"] }}</li>
+            {% elif book["publisher"] != "" %}
+                <li>タイトル: <a href="/book/detail/{{ book["id"] }}" role="button"><b>「{{ book["title"] }}」</b></a>出版社: {{ book["publisher"] }}</li>
+            {% else %}
+                <li>タイトル: <a href="/book/detail/{{ book["id"] }}" role="button"><b>「{{ book["title"] }}」</b></a>出版社 and 著者: 情報がありません</li>
+            {% endif %}
             <br>
         {% endfor %}
     </ul>
