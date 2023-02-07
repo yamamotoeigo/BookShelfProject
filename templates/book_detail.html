@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<div class="container">
+    <h1>登録ページです</h1>
+    {% if book["thumbnail"] != "" %}
+        <img src={{ book["thumbnail"] }} alt="本の表紙画像">
+    {% else %}
+        <img src={{ book["thumbnail"] }} alt="表紙画像がありません">
+    {% endif %}
+    <h3>
+        {% if book["author"] != "" %}
+            タイトル: <b>「{{ book["title"] }}」</b><br>出版社 or 著者: {{ book["author"] }}
+        {% elif book["publisher"] != "" %}
+            タイトル: <b>「{{ book["title"] }}」</b><br>出版社 or 著者: {{ book["publisher"] }}
+        {% else %}
+            タイトル: <b>「{{ book["title"] }}」</b><br>出版社 or 著者: 情報がありません
+        {% endif %}
+    </h3>
+    <form action="/book/detail/{{ book["id"] }}" method="post">
+        <input type="submit" value="登録">
+    </form>
+</div>
+</body>
+</html>
