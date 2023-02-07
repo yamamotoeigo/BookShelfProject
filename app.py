@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, flash, redirect
 import requests, jsonify
 
 app = Flask(__name__)
@@ -7,17 +7,16 @@ url = 'https://www.googleapis.com/books/v1/volumes?q='
 # グローバル変数
 books = []
 
-
 @app.route("/")
 def hello_world():
-    return "<h1>Hello Flask!</h1>"
+    return "<h1>ホームです</h1>"
 
 
 @app.route('/post', methods=["GET", "POST"])
 def post():
     if request.method == "GET":
         return render_template("post.html")
-    elif request.method == "POST":
+    if request.method == "POST":
         return render_template("post.html", username=request.form['username'], content=request.form['content'])
 
 
@@ -31,9 +30,9 @@ def search():
         global books
         books = []
         q = request.form['q']
+
         if q == "":
-            print("hoge")
-            return render_template('/search.html')
+            return redirect('/search')
         else:
             # json
             books = get_book_info(q)
@@ -41,12 +40,14 @@ def search():
 
 
 # 本の個別ページ
-@app.route('/book/detail/<int:book_id>', methods=["GET"])
+@app.route('/book/register/<int:book_id>', methods=["GET", "POST"])
 def book_detail(book_id):
-    # book_id -= 1
-    book = books[(book_id - 1)]
-    return render_template('bookDetail.html', book=book)
+    if request.method == "GET":
+        book = books[(book_id - 1)]
+        return render_template('book_detail.html', book=book)
 
+    if request.method == "POST":
+        return "登録しました"
 
 # APIを叩いて本に関するデータを得る
 def get_book(q):
@@ -63,21 +64,21 @@ def get_book_info(q):
     for i in range(total_items):
         author = ""
         publisher = ""
-        image_url = ""
+        thumbnail = ""
         if "authors" in book_data["items"][i]["volumeInfo"]:
             author = book_data["items"][i]["volumeInfo"]["authors"][0]
         elif "publisher" in book_data["items"][i]["volumeInfo"]:
             publisher = book_data["items"][i]["volumeInfo"]["publisher"]
 
         if "imageLinks" in book_data["items"][i]["volumeInfo"]:
-            image_url = book_data["items"][i]["volumeInfo"]["imageLinks"]["smallThumbnail"]
+            thumbnail = book_data["items"][i]["volumeInfo"]["imageLinks"]["smallThumbnail"]
 
         books.append({
             "id": i + 1,
             "title": book_data["items"][i]["volumeInfo"]["title"],
             "publisher": publisher,
             "author": author,
-            "image_url": image_url,
+            "thumbnail": thumbnail,
         })
 
     return books
